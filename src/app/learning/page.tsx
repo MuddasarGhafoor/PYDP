@@ -1,0 +1,21 @@
+"use client";
+import { useState } from "react";
+import { ArrowRight, BookOpen, Check, CheckCircle2, FileText, Globe2, Search, Save } from "lucide-react";
+import { lessons } from "@/lib/content";
+import { useApp } from "@/components/providers";
+import { ActionLink, Field, IconBox, Notice, PageIntro, Progress, SectionHeading } from "@/components/ui";
+const draftKeys = ["problem", "evidence", "options", "recommendation", "summary"];
+export default function LearningPage() {
+  const { state, update, notify } = useApp(); const [selected, setSelected] = useState(0); const lesson = lessons[selected];
+  const text = state.lessonAnswers[selected] || "";
+  function save(complete = false) {
+    if (!text.trim()) { notify("Write your exercise answer before saving or completing this lesson."); return; }
+    const saved = update(current => ({ ...current, answers: { ...current.answers, [draftKeys[selected]]: text }, completed: complete ? [...new Set([...current.completed, selected])] : current.completed }));
+    if (saved) notify(complete ? "Lesson marked complete. Your exercise is saved to My Draft." : "Your exercise has been saved to My Draft.");
+  }
+  return <><PageIntro eyebrow="Learning Hub" title="Build your idea, one step at a time." description="Short explanations, worked examples and exercises that feed directly into your Policy Lab draft." number="02" />
+    <section className="learning-layout content-section"><aside className="panel learning-sidebar"><p className="eyebrow">Your learning pathway</p><h2>From an Interest to a Policy Proposal</h2><p>Complete the five lessons in sequence or revisit any lesson when you need support.</p><Progress count={state.completed.length} /><div className="lesson-list" aria-label="Choose a lesson">{lessons.map((l, i) => <button key={l.title} className={`lesson-button ${selected === i ? "active" : ""}`} onClick={() => setSelected(i)} aria-pressed={selected === i}><span className={`lesson-number ${state.completed.includes(i) ? "complete" : ""}`}>{state.completed.includes(i) ? <Check size={16} /> : `0${i + 1}`}</span><span><strong>{l.title}</strong><small>{state.completed.includes(i) ? "Completed" : "Short lesson · Exercise"}</small></span><ArrowRight size={16} /></button>)}</div><ActionLink href="/lab" secondary>Open my draft</ActionLink></aside>
+    <article className="panel lesson-content" aria-labelledby="lesson-title"><div className="panel-heading"><span className="eyebrow">Selected lesson</span><span className="tag">Lesson {selected + 1} of 5</span></div><h2 id="lesson-title">{selected + 1}. {lesson.title}</h2><p>{lesson.intro}</p><div className="worked-example"><BookOpen size={22} /><div><span className="eyebrow">Worked example</span><p>{lesson.example}</p></div></div><Field label={`Your exercise - ${lesson.title}`} multiline value={text} placeholder={lesson.exercise} onChange={value => update(current => ({ ...current, lessonAnswers: { ...current.lessonAnswers, [selected]: value } }))} /><p className="field-hint">{lesson.exercise}</p><div className="actions"><button className="button secondary" onClick={() => save()}><Save size={17} />Save answer to My Draft</button><button className="button" onClick={() => save(true)}>{state.completed.includes(selected) ? "Update completed lesson" : "Mark lesson complete"}<CheckCircle2 size={17} /></button></div><Notice>Hint: be specific, use evidence where possible, and distinguish facts from assumptions. Saving an exercise to My Draft updates its matching Policy Lab section.</Notice></article></section>
+    <section className="section-block"><SectionHeading title="Other learning resources" description="Additional resources can be added as the platform develops." /><div className="grid three">{[{icon: FileText,title:"Policy brief basics",text:"Purpose, audience, structure and writing style.",tag:"Resource template"},{icon:Search,title:"Research & evidence",text:"Finding credible sources and supporting claims.",tag:"Practice guide"},{icon:Globe2,title:"Diplomacy & engagement",text:"Communication, negotiation and youth participation.",tag:"Resource collection"}].map(r => <article className="card" key={r.title}><IconBox icon={r.icon} /><h3>{r.title}</h3><p>{r.text}</p><span className="tag">{r.tag}</span></article>)}</div></section>
+  </>;
+}
