@@ -1,92 +1,189 @@
 # PYDP
 
-## Development with pnpm
+**Pakistan Youth Diplomacy & Policy Pathways**
+
+A learning and policy-development platform that helps students discover opportunities, build research and writing skills, develop policy briefs, and track feedback and progress.
+
+The platform connects the student journey across seven stages:
+
+**Discover → Learn → Develop → Submit → Review → Revise → Portfolio**
+
+## Overview
+
+PYDP brings opportunity discovery, guided learning, policy drafting, and progress tracking into one responsive workspace. The current release is an interactive frontend with browser-based persistence and clearly identified demonstration content.
+
+### Core features
+
+- **Opportunity discovery** - Browse sample scholarships, internships, dialogues, conferences, and policy research opportunities with category filters and search.
+- **Guided learning** - Work through five lessons with explanations, worked examples, exercises, and completion tracking.
+- **Policy brief workspace** - Develop a brief through six steps covering the issue, evidence, options, recommendations, outcomes, and review readiness.
+- **Submission workflow** - Enter student details, review a draft, complete confirmations, and receive a simulated submission acknowledgement.
+- **Mentor and discussion records** - Record guidance requests and capture insights from discussions.
+- **Portfolio and feedback** - Review learning progress, submission status, suggested actions, saved exercises, and revision history. Explore four feedback categories without changing the saved submission.
+
+## Technology stack
+
+| Area | Implementation |
+| --- | --- |
+| Framework | Next.js 16 with App Router |
+| UI | React 19 and TypeScript |
+| Styling | Tailwind CSS 4 and shared CSS design tokens |
+| Icons | Lucide React |
+| Custom selects | Radix UI Select |
+| Typography | Carter One for headings and branding; system sans-serif for body text |
+| State and persistence | React context, `useSyncExternalStore`, and browser `localStorage` |
+| Package management | pnpm with a committed lockfile |
+| Code quality | ESLint, TypeScript checks, and Node.js tests |
+
+## Getting started
+
+### Prerequisites
+
+- Node.js **20.9 or newer**, as specified in `package.json`.
+- pnpm installed and available in your terminal.
+
+### Local development
+
+From the project directory:
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000. Use a supported Node.js LTS release (minimum 20.9).
-The project uses pnpm and includes `pnpm-lock.yaml`.
+Open [localhost:3000](http://localhost:3000).
+
+The current frontend does not require environment variables, API credentials, or a database connection.
+
+### Production build
 
 ```sh
-pnpm typecheck
-pnpm test
-pnpm lint
 pnpm build
 pnpm start
 ```
 
-If Turbopack fails to start its CSS worker in your Windows environment, use
-`pnpm dev:webpack` or `pnpm build:webpack`. Both use Next.js's supported Webpack
-builder. A production build is required before `pnpm start`.
+`pnpm start` serves an existing production build. Run the build command again after changing application code.
 
-## Pages and interactions
+### Available commands
 
-- `/`: home, entry pathways, learning progress and latest submission.
-- `/opportunities`: all six sample opportunities, category filters, search and details.
-- `/learning`: five lessons, worked examples, exercises and completion tracking.
-- `/lab`: six-step policy brief workspace with automatic saving and readiness checks.
-- `/submit`: student details, custom contribution selector, confirmations and simulated submission.
-- `/mentors`: custom guidance selector, locally recorded requests and discussion notes.
-- `/portfolio`: submission tracker, four feedback previews, next actions, revisions and saved exercises.
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | Start the development server with Turbopack |
+| `pnpm build` | Create the production build with Turbopack |
+| `pnpm start` | Serve the production build |
+| `pnpm dev:webpack` | Start development with Webpack |
+| `pnpm build:webpack` | Create a production build with Webpack |
+| `pnpm typecheck` | Generate Next.js route types and check TypeScript |
+| `pnpm lint` | Run ESLint |
+| `pnpm test` | Run persistence and state-recovery tests |
 
-## Design and accessibility
+### Windows build troubleshooting
 
-Carter One is loaded using the requested Google Fonts CSS import for headings
-and branding. Body copy and forms use a system sans-serif. Font loading requires
-an internet connection; a serif fallback is provided.
+If Turbopack reports a CSS-worker startup failure, use the included Webpack commands:
 
-The interface uses square corners, a navy/teal/ivory palette, Lucide icons,
-custom scrollbars, a keyboard-accessible Radix Select, and a mobile hamburger
-menu. Active navigation uses bold text and an underline. Light/dark mode follows
-the system on the first visit and remembers subsequent toggle choices.
+```sh
+pnpm dev:webpack
+```
 
-Form labels, focus indicators, a skip link, status announcements, text labels
-for review colors and reduced-motion support are included.
+For a production build:
 
-## Local prototype data
+```sh
+pnpm build:webpack
+pnpm start
+```
 
-The original `pydp_demo` localStorage key is retained for compatibility. Data
-belongs to the current browser and origin. There is no account system or server
-storage. Theme preference uses `pydp_theme`.
+## Application routes
 
-Exercise text is saved while typing. "Save answer to My Draft" and "Mark lesson
-complete" copy the answer into the corresponding policy brief section. Saving
-again updates that section. Draft edits and readiness checks save automatically.
+| Route | Page | Purpose |
+| --- | --- | --- |
+| `/` | Home | Entry pathways, learning progress, and the latest submission |
+| `/opportunities` | Opportunity Map | Search, filter, and inspect sample opportunities |
+| `/learning` | Learning Hub | Lessons, exercises, and learning progress |
+| `/lab` | Policy Lab | Policy brief drafting and readiness checks |
+| `/submit` | Submission | Student details, confirmations, and simulated handover |
+| `/mentors` | Mentor Connect | Guidance requests and discussion contributions |
+| `/portfolio` | My Portfolio | Feedback, next steps, learning records, and revisions |
 
-Submission is simulated and creates a reference with the original illustrative
-Yellow feedback. Previewing Green, Yellow, Blue or Red feedback does not alter
-the saved submission. Revision notes are retained in the portfolio. Mentor
-requests are recorded locally and are not sent to anyone.
+## Interface and accessibility
 
-All opportunity listings, resources and review outcomes retain their sample
-status. Official application destinations and backend integrations are not yet
-connected.
+The interface uses a navy, teal, and ivory palette, square-corner components, consistent spacing, and clear separation between sections.
 
-## Source layout
+- **Theme support:** Light and dark themes follow the system preference on the first visit. Subsequent choices are remembered, and the navbar toggle uses an icon-color hover treatment.
+- **Navigation:** Active links use bold text and an underline. Page changes start at the top; hash links retain their anchor targets.
+- **Mobile navigation:** A full-screen drawer opens from the right, locks background scrolling, manages keyboard focus, and supports Escape to close.
+- **Responsive layouts:** Learning and mentor panels share equal heights when displayed side by side. Portfolio review controls occupy a separate section below the main panels.
+- **Accessible controls:** Forms have associated labels, visible focus indicators, keyboard-accessible selects, and status announcements. Review categories include text labels alongside color.
+- **Reading and motion:** A skip link, custom scrollbars, readable journey steps, and reduced-motion support are included.
 
-- `src/app/`: route pages, global styles and root layout.
-- `src/components/`: shared UI, header/footer and state provider.
-- `src/lib/content.ts`: lessons, opportunities, form fields and sample feedback.
-- `src/lib/store.ts`: browser persistence and legacy state normalization.
-- `scripts/store.test.cjs`: persistence, migration and storage-failure checks.
+Carter One loads through a Google Fonts CSS import. A serif fallback is available when the font cannot be downloaded.
 
-## Verification
+## Data and persistence
 
-TypeScript checks, all five persistence tests and the Webpack production build
-passed. Browser checks covered light/dark themes, mobile navigation, keyboard
-selection, filtering, exercise-to-draft transfer, submission validation,
-simulated submission, feedback previews, revision persistence, mentor requests
-and discussion notes. All seven routes were checked for horizontal overflow at
-320px, with additional tablet and desktop checks. The temporary preview server
-has been stopped.
+Application data is stored locally in the current browser and origin.
 
-The default Turbopack build encountered a CSS-worker startup failure on this
-Windows machine; the Webpack fallback compiled and prerendered every route.
+| Storage key | Contents |
+| --- | --- |
+| `pydp_demo` | Draft answers, lesson exercises, completion records, student details, submission information, revisions, guidance requests, and discussion notes |
+| `pydp_theme` | Selected light or dark theme |
 
-References: [Radix Select](https://www.radix-ui.com/primitives/docs/components/select),
-[Lucide React](https://lucide.dev/guide/react),
-[Next.js](https://nextjs.org/docs/app/getting-started/installation), and
-[Tailwind CSS](https://tailwindcss.com/docs/installation/using-postcss).
+Exercise text is saved while typing. **Save answer to My Draft** and **Mark lesson complete** copy an exercise into its corresponding Policy Lab section. Saving the exercise again updates that section. Policy Lab edits and readiness checks save automatically.
+
+The state store supports cross-tab updates and recovery from malformed stored data. If browser storage is unavailable, changes remain in memory for the current session and the interface displays a notification.
+
+Data is not synchronized between devices or different origins. Clearing browser site data removes saved progress. Use sample student details when demonstrating the platform.
+
+## Current scope
+
+The current implementation supports the complete frontend journey with demonstration data:
+
+- Opportunity listings and learning resource collections are illustrative; official application destinations are not connected.
+- Submissions create a local reference and display sample Yellow feedback. They are not transmitted to an external review panel.
+- Green, Yellow, Blue, and Red feedback previews are illustrative assessments and do not overwrite the saved submission.
+- Mentor guidance requests are recorded locally and are not sent to a mentor.
+- Authentication, server-side storage, live opportunity feeds, and external review integrations are not implemented.
+
+Internal feedback represents learning guidance, not external acceptance, funding approval, or a guaranteed referral.
+
+## Project structure
+
+```text
+src/
+├── app/
+│   ├── page.tsx                  # Home page
+│   ├── layout.tsx                # Shared application layout and metadata
+│   ├── globals.css               # Design tokens, themes, and responsive styles
+│   ├── opportunities/page.tsx
+│   ├── learning/page.tsx
+│   ├── lab/page.tsx
+│   ├── submit/page.tsx
+│   ├── mentors/page.tsx
+│   └── portfolio/page.tsx
+├── components/
+│   ├── providers.tsx             # Application state and notifications
+│   ├── route-scroll-reset.tsx    # Scroll position on route changes
+│   ├── site-shell.tsx            # Navigation, mobile drawer, and footer
+│   └── ui.tsx                    # Shared form and presentation components
+└── lib/
+    ├── content.ts                # Lessons, opportunities, fields, and feedback
+    └── store.ts                  # Persistence and stored-state normalization
+scripts/
+└── store.test.cjs                # State and persistence tests
+public/                          # Static assets
+```
+
+The `@/*` import alias maps to `src/*`. Tailwind configuration is defined in CSS, with its PostCSS integration in `postcss.config.mjs`.
+
+## Development checks
+
+Before submitting a change, run:
+
+```sh
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm build
+```
+
+The persistence tests cover malformed storage, saved-data compatibility, subscriber notifications, storage failures, and cross-tab updates. Use `pnpm build:webpack` if the Turbopack worker issue described above affects your environment.
+
+For interface changes, also verify desktop and mobile layouts, both themes, keyboard navigation, route scroll position, and the affected student workflow.
