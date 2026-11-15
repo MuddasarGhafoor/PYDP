@@ -6,8 +6,8 @@ import { useId, type ReactNode } from "react";
 export function ActionLink({ href, children, secondary = false }: { href: string; children: ReactNode; secondary?: boolean }) {
   return <Link href={href} className={`button ${secondary ? "secondary" : ""}`}>{children}<ArrowRight size={17} aria-hidden="true" /></Link>;
 }
-export function PageIntro({ eyebrow, title, description, number }: { eyebrow: string; title: string; description: string; number: string }) {
-  return <header className="page-intro"><div><p className="eyebrow"><span className="line" />{eyebrow}</p><h1>{title}</h1><p className="intro-copy">{description}</p></div><span className="page-number" aria-hidden="true">{number}</span></header>;
+export function PageIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
+  return <header className="page-intro"><div><p className="eyebrow"><span className="line" />{eyebrow}</p><h1>{title}</h1><p className="intro-copy">{description}</p></div></header>;
 }
 export function SectionHeading({ title, description, children }: { title: string; description?: string; children?: ReactNode }) {
   return <div className="section-heading"><div><h2>{title}</h2>{description && <p>{description}</p>}</div>{children}</div>;
