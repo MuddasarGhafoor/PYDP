@@ -1,8 +1,5 @@
 # PYDP
 
-A complete Next.js App Router recreation of the original PYDP HTML prototype.
-The reference `PYDP_Integrated_Platform_V2.html` is unchanged.
-
 ## Development with pnpm
 
 ```sh
